@@ -1,0 +1,35 @@
+﻿Les textures ne s'appliquent pas sur le objets FreeGlut. 
+L'utilisation des quadrics est alors nécessaire.
+L'utilisation de glList est conseillée :
+//------------------------
+   static uint Ma_Texture;
+   static uint Objet_Sphere;
+//------------------------
+static uint Creation_Sphere()
+{
+      uint Numero_Objet = GL.GenLists(1);
+      IntPtr Quadric = GLU.NewQuadric();
+      GLU.QuadricTexture(Quadric, true);
+      GLU.QuadricNormals(Quadric, GLU.GLU_SMOOTH);
+      GL.NewList(Numero_Objet, GL.GL_COMPILE);
+      GLU.Sphere(Quadric, 3, 50, 50);
+      GL.EndList();
+      return Numero_Objet;
+}
+//------------------------
+static void Initialisation_Animation()
+ {
+      OPENGL_Active_Reflexion();
+
+ Ma_Texture = OPENGL_Charge_Texture("oeil.png",true);
+ Objet_Sphere = Creation_Sphere();
+}
+//------------------------
+
+ static void Afficher_Ma_Scene()
+{
+   GL.Enable(GL.GL_TEXTURE_2D);
+   GL.BindTexture(GL.GL_TEXTURE_2D, Ma_Texture);
+   GL.Rotated(90, 1, 0, 0);
+   GL.CallList(Objet_Sphere);
+}
